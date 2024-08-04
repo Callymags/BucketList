@@ -1,6 +1,9 @@
 package com.bucketlist.project.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 
 @Entity (name = "categories")
 public class Category {
@@ -9,14 +12,16 @@ public class Category {
     @SequenceGenerator(name = "category_seq", sequenceName = "category_seq", allocationSize = 1)
     private Long categoryId;
 
-    private String CategoryName;
+    @NotBlank
+    @Size(min = 3, message = "Category name must contain at least three characters")
+    private String categoryName;
 
     public Category() {
     }
 
     public Category(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
-        CategoryName = categoryName;
+        this.categoryName = categoryName;
     }
 
     public Long getCategoryId() {
@@ -28,10 +33,10 @@ public class Category {
     }
 
     public String getCategoryName() {
-        return CategoryName;
+        return categoryName;
     }
 
     public void setCategoryName(String categoryName) {
-        CategoryName = categoryName;
+        this.categoryName = categoryName;
     }
 }
