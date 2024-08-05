@@ -12,5 +12,7 @@
 target/
 # Ignore Maven wrapper properties
 .mvn/wrapper/maven-wrapper.properties
+# Ignore Maven config
+.mvn/maven.config
 # Ignore env file
 .env

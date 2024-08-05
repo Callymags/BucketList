@@ -1,12 +1,14 @@
 package com.bucketlist.project.service;
 
 import com.bucketlist.project.model.Category;
+import com.bucketlist.project.payload.CategoryDTO;
+import com.bucketlist.project.payload.CategoryResponse;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<Category> getAllCategories();
-    void createCategory(Category category);
-    String deleteCategory(Long categoryId);
-    Category updateCategory(Category category, Long categoryId);
+    CategoryResponse getAllCategories();
+    CategoryDTO createCategory(CategoryDTO categoryDTO);
+    CategoryDTO deleteCategory(Long categoryId);
+    CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId);
 }
