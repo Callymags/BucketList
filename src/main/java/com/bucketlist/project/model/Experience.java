@@ -2,6 +2,7 @@ package com.bucketlist.project.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity (name = "experiences")
@@ -9,7 +10,7 @@ public class Experience {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "experience_seq")
     @SequenceGenerator(name = "experience_seq", sequenceName = "experience_seq", allocationSize = 1)
-    private Long id;
+    private Long experienceId;
 
     @NotBlank
     @Size(min = 3, message = "Experience name must contain at least three characters")
@@ -21,28 +22,34 @@ public class Experience {
 
     private String imgAddress;
 
+    @NotBlank
+    @Size(min = 3, message = "Experience description must contain at least three characters")
     private String description;
 
-    private Integer addedBy;
+    @NotNull
+    private Long addedBy;
+    @NotNull
+    private Long lastModifiedBy;
 
     public Experience() {
     }
 
-    public Experience(Long id, String experienceName, Category category, String imgAddress, String description, Integer addedBy) {
-        this.id = id;
+    public Experience(Long experienceId, String experienceName, Category category, String imgAddress, String description, Long addedBy, Long lastModifiedBy) {
+        this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.category = category;
         this.imgAddress = imgAddress;
         this.description = description;
         this.addedBy = addedBy;
+        this.lastModifiedBy = lastModifiedBy;
     }
 
-    public Long getId() {
-        return id;
+    public Long getExperienceIdId() {
+        return experienceId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setExperienceId(Long id) {
+        this.experienceId = experienceId;
     }
 
     public String getExperienceName() {
@@ -77,11 +84,19 @@ public class Experience {
         this.description = description;
     }
 
-    public Integer getAddedBy() {
+    public Long getAddedBy() {
         return addedBy;
     }
 
-    public void setAddedBy(Integer addedBy) {
+    public void setAddedBy(Long addedBy) {
         this.addedBy = addedBy;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 }

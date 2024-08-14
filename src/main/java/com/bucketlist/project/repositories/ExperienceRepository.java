@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface ExperienceRepository extends JpaRepository<Experience, Long> {
     List<Experience> findByCategory(Category category);
+
+    List<Experience> findByExperienceNameLikeIgnoreCase(String keyword);
 }

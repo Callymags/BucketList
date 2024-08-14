@@ -3,6 +3,7 @@ package com.bucketlist.project.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 @Entity (name = "categories")
@@ -15,6 +16,9 @@ public class Category {
     @NotBlank
     @Size(min = 3, message = "Category name must contain at least three characters")
     private String categoryName;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Experience> experiences;
 
     public Category() {
     }
@@ -38,5 +42,13 @@ public class Category {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public List<Experience> getExperiences() {
+        return experiences;
+    }
+
+    public void setExperiences(List<Experience> experiences) {
+        this.experiences = experiences;
     }
 }

@@ -1,25 +1,25 @@
 package com.bucketlist.project.payload;
 
-import com.bucketlist.project.model.Category;
-
 public class ExperienceDTO {
     private Long experienceId;
     private String experienceName;
     private Long categoryId;
     private String imgAddress;
     private String description;
-    private Integer addedBy;
+    private Long addedBy;
+    private Long lastModifiedBy;
 
     public ExperienceDTO() {
     }
 
-    public ExperienceDTO(Long experienceId, String experienceName, Long categoryId, String imgAddress, String description, Integer addedBy) {
+    public ExperienceDTO(Long experienceId, String experienceName, Long categoryId, String imgAddress, String description, Long addedBy, Long lastModifiedBy) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.categoryId = categoryId;
         this.imgAddress = imgAddress;
         this.description = description;
         this.addedBy = addedBy;
+        this.lastModifiedBy = lastModifiedBy;
     }
 
     public Long getExperienceId() {
@@ -62,11 +62,19 @@ public class ExperienceDTO {
         this.description = description;
     }
 
-    public Integer getAddedBy() {
+    public Long getAddedBy() {
         return addedBy;
     }
 
-    public void setAddedBy(Integer addedBy) {
+    public void setAddedBy(Long addedBy) {
         this.addedBy = addedBy;
+    }
+
+    public Long getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(Long lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
     }
 }

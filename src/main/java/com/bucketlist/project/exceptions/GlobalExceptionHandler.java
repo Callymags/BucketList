@@ -38,4 +38,11 @@ public class GlobalExceptionHandler {
         APIResponse apiResponse = new APIResponse(message, false);
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PermissionDeniedException.class)
+    public ResponseEntity<APIResponse> customPermissionDeniedException(PermissionDeniedException e) {
+        String message = e.getMessage();
+        APIResponse apiResponse = new APIResponse(message, false);
+        return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
+    }
 }
