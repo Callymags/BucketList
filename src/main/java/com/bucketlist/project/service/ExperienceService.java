@@ -9,11 +9,11 @@ import java.io.IOException;
 public interface ExperienceService {
     ExperienceDTO addExperience(Long categoryId, ExperienceDTO experience, Long userId);
 
-    ExperienceResponse getAllExperiences();
+    ExperienceResponse getAllExperiences(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    ExperienceResponse searchByCategory(Long categoryId);
+    ExperienceResponse searchByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    ExperienceResponse searchExperienceByKeyword(String keyword);
+    ExperienceResponse searchExperienceByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
     ExperienceDTO updateExperience(Long experienceId, ExperienceDTO experience, Long userId);
 

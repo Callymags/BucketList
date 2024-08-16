@@ -2,14 +2,14 @@ package com.bucketlist.project.repositories;
 
 import com.bucketlist.project.model.Category;
 import com.bucketlist.project.model.Experience;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface ExperienceRepository extends JpaRepository<Experience, Long> {
-    List<Experience> findByCategory(Category category);
+    Page<Experience> findByCategory(Category category, Pageable pageDetails);
 
-    List<Experience> findByExperienceNameLikeIgnoreCase(String keyword);
+    Page<Experience> findByExperienceNameLikeIgnoreCase(String s, Pageable keyword);
 }

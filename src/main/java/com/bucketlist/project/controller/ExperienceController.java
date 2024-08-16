@@ -1,5 +1,6 @@
 package com.bucketlist.project.controller;
 
+import com.bucketlist.project.config.AppConstants;
 import com.bucketlist.project.model.Experience;
 import com.bucketlist.project.payload.ExperienceDTO;
 import com.bucketlist.project.payload.ExperienceResponse;
@@ -28,20 +29,33 @@ public class ExperienceController {
     }
 
     @GetMapping("/public/experiences")
-    public ResponseEntity<ExperienceResponse> getAllExperiences() {
-        ExperienceResponse experienceResponse = experienceService.getAllExperiences();
+    public ResponseEntity<ExperienceResponse> getAllExperiences(
+            @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_EXPERIENCES_BY, required = false) String sortBy,
+            @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_EXPERIENCES_ORDER, required = false) String sortOrder
+    ) {
+        ExperienceResponse experienceResponse = experienceService.getAllExperiences(pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(experienceResponse, HttpStatus.OK);
     }
 
     @GetMapping("/public/categories/{categoryId}/experiences")
-    public ResponseEntity<ExperienceResponse> getExperiencesByCategory(@PathVariable Long categoryId) {
-        ExperienceResponse experienceResponse = experienceService.searchByCategory(categoryId);
+    public ResponseEntity<ExperienceResponse> getExperiencesByCategory(@PathVariable Long categoryId,
+                                                                       @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                                       @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                                       @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_EXPERIENCES_BY, required = false) String sortBy,
+                                                                       @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_EXPERIENCES_ORDER, required = false) String sortOrder) {
+        ExperienceResponse experienceResponse = experienceService.searchByCategory(categoryId, pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(experienceResponse, HttpStatus.OK);
     }
 
     @GetMapping("/public/experiences/keyword/{keyword}")
-    public ResponseEntity<ExperienceResponse> getExperienceByKeyword(@PathVariable String keyword){
-        ExperienceResponse experienceResponse = experienceService.searchExperienceByKeyword(keyword);
+    public ResponseEntity<ExperienceResponse> getExperienceByKeyword(@PathVariable String keyword,
+                                                                     @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+                                                                     @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+                                                                     @RequestParam(name = "sortBy", defaultValue = AppConstants.SORT_EXPERIENCES_BY, required = false) String sortBy,
+                                                                     @RequestParam(name = "sortOrder", defaultValue = AppConstants.SORT_EXPERIENCES_ORDER, required = false) String sortOrder){
+        ExperienceResponse experienceResponse = experienceService.searchExperienceByKeyword(keyword, pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(experienceResponse, HttpStatus.OK);
     }
 

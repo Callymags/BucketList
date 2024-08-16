@@ -12,6 +12,10 @@ import com.bucketlist.project.repositories.ExperienceRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,8 +73,15 @@ public class ExperienceServiceImpl implements ExperienceService {
     }
 
     @Override
-    public ExperienceResponse getAllExperiences() {
-        List<Experience> experiences = experienceRepository.findAll();
+    public ExperienceResponse getAllExperiences(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Page<Experience> pageExperiences = experienceRepository.findAll(pageDetails);
+
+        List<Experience> experiences = pageExperiences.getContent();
+
         List<ExperienceDTO> experienceDTOS = experiences.stream()
                 .map(experience -> modelMapper.map(experience, ExperienceDTO.class))
                 .collect(Collectors.toList());
@@ -81,15 +92,26 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         ExperienceResponse experienceResponse = new ExperienceResponse();
         experienceResponse.setContent(experienceDTOS);
+        experienceResponse.setPageNumber(pageExperiences.getNumber());
+        experienceResponse.setPageSize(pageExperiences.getSize());
+        experienceResponse.setTotalElements(pageExperiences.getTotalElements());
+        experienceResponse.setTotalPages(pageExperiences.getTotalPages());
+        experienceResponse.setLastPage(pageExperiences.isLast());
         return experienceResponse;
     }
 
     @Override
-    public ExperienceResponse searchByCategory(Long categoryId) {
+    public ExperienceResponse searchByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
-        List<Experience> experiences = experienceRepository.findByCategory(category);
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Page<Experience> pageExperiences = experienceRepository.findByCategory(category, pageDetails);
+
+        List<Experience> experiences = pageExperiences.getContent();
 
         if (experiences.isEmpty()) {
             throw new APIException("No experiences found for the given category");
@@ -101,19 +123,38 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         ExperienceResponse experienceResponse = new ExperienceResponse();
         experienceResponse.setContent(experienceDTOS);
+        experienceResponse.setPageNumber(pageExperiences.getNumber());
+        experienceResponse.setPageSize(pageExperiences.getSize());
+        experienceResponse.setTotalElements(pageExperiences.getTotalElements());
+        experienceResponse.setTotalPages(pageExperiences.getTotalPages());
+        experienceResponse.setLastPage(pageExperiences.isLast());
         return experienceResponse;
     }
 
     @Override
-    public ExperienceResponse searchExperienceByKeyword(String keyword) {
-        List<Experience> experiences = experienceRepository.findByExperienceNameLikeIgnoreCase('%' + keyword + '%');
+    public ExperienceResponse searchExperienceByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
 
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Page<Experience> pageExperiences = experienceRepository.findByExperienceNameLikeIgnoreCase('%' + keyword + '%', pageDetails);
+
+        List<Experience> experiences = pageExperiences.getContent();
         List<ExperienceDTO> experienceDTOS = experiences.stream()
                 .map(experience -> modelMapper.map(experience, ExperienceDTO.class))
                 .collect(Collectors.toList());
 
+        if (experiences.isEmpty()){
+            throw new APIException("Experiences not found with keyword: " + keyword);
+        }
+
         ExperienceResponse experienceResponse = new ExperienceResponse();
         experienceResponse.setContent(experienceDTOS);
+        experienceResponse.setPageNumber(pageExperiences.getNumber());
+        experienceResponse.setPageSize(pageExperiences.getSize());
+        experienceResponse.setTotalElements(pageExperiences.getTotalElements());
+        experienceResponse.setTotalPages(pageExperiences.getTotalPages());
+        experienceResponse.setLastPage(pageExperiences.isLast());
         return experienceResponse;
     }
 
