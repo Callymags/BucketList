@@ -8,6 +8,7 @@
 /dataSources.local.xml
 # Ignore IntelliJ IDEA project files
 .idea/
+*.iml
 # Ignore target directory
 target/
 # Ignore Maven wrapper properties
