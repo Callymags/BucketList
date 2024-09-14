@@ -1,4 +1,4 @@
-package com.bucketlist.project.experiences.microservice.users.user_microservice;
+package com.bucketlist.project.users.microservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

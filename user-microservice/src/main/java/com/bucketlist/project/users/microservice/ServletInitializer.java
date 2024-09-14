@@ -1,4 +1,4 @@
-package com.bucketlist.project.experiences.microservice.users.user_microservice;
+package com.bucketlist.project.users.microservice;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
