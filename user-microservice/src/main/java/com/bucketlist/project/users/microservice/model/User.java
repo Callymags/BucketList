@@ -43,7 +43,7 @@ public class User {
     }
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "roleId", nullable = false) // Foreign key to the role table
+    @JoinColumn(name = "roleId", nullable = false)
     private Role role;
 
     public Long getUserId() {
