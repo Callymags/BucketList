@@ -9,8 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>experiences-microservice</module>
-        <module>user-microservice</module>
+        <module>bucketlist-service</module>
     </modules>
 
     <properties>

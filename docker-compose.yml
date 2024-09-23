@@ -1,64 +1,32 @@
 services:
-  experiencedb:
+  bucketlistdb:
     image: postgres
     restart: always
     shm_size: 128mb
     environment:
-      POSTGRES_USER: ${EXPERIENCE_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${EXPERIENCE_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${EXPERIENCE_POSTGRES_DB}
+      POSTGRES_USER: ${BUCKETLIST_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${BUCKETLIST_POSTGRES_PASSWORD}
+      POSTGRES_DB: ${BUCKETLIST_POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
-      - experiencepgdata:/var/lib/postgresql/data
+      - bucketlistpgdata:/var/lib/postgresql/data
     networks:
       - bucketlist-network
 
-
-  userdb:
-    image: postgres
-    restart: always
-    shm_size: 128mb
-    environment:
-      POSTGRES_USER: ${USER_POSTGRES_USER}
-      POSTGRES_PASSWORD: ${USER_POSTGRES_PASSWORD}
-      POSTGRES_DB: ${USER_POSTGRES_DB}
-    ports:
-      - "5433:5432"
-    volumes:
-      - userpgdata:/var/lib/postgresql/data
-    networks:
-      - bucketlist-network
-
-  user-service:
-    image: user-service
+  bucketlist-service:
+    image: bucketlist-service
     build:
-      context: ./user-microservice
-    restart: always
-    ports:
-      - "8081:8081"
-    depends_on:
-      - userdb
-    environment:
-      USER_POSTGRES_USER: ${USER_POSTGRES_USER}
-      USER_POSTGRES_PASSWORD: ${USER_POSTGRES_PASSWORD}
-      USER_POSTGRES_DB: ${USER_POSTGRES_DB}
-    networks:
-      - bucketlist-network
-
-  experience-service:
-    image: experience-service
-    build:
-      context: ./experiences-microservice
+      context: ./bucketlist-service
     restart: always
     ports:
       - "8080:8080"
     depends_on:
-      - experiencedb
+      - bucketlistdb
     environment:
-      EXPERIENCE_POSTGRES_USER: ${EXPERIENCE_POSTGRES_USER}
-      EXPERIENCE_POSTGRES_PASSWORD: ${EXPERIENCE_POSTGRES_PASSWORD}
-      EXPERIENCE_POSTGRES_DB: ${EXPERIENCE_POSTGRES_DB}
+      BUCKETLIST_POSTGRES_USER: ${BUCKETLIST_POSTGRES_USER}
+      BUCKETLIST_POSTGRES_PASSWORD: ${BUCKETLIST_POSTGRES_PASSWORD}
+      BUCKETLIST_POSTGRES_DB: ${BUCKETLIST_POSTGRES_DB}
     networks:
       - bucketlist-network
 
@@ -71,14 +39,12 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      - experiencedb
-      - userdb
+      - bucketlistdb
     networks:
       - bucketlist-network
 
 volumes:
-  experiencepgdata:
-  userpgdata:
+  bucketlistpgdata:
 
 networks:
   bucketlist-network:
