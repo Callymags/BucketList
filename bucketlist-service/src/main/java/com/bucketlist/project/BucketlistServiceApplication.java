@@ -6,15 +6,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BucketlistServiceApplication {
-
 	public static void main(String[] args) {
 		Dotenv dotenv = Dotenv.configure().load();
-		System.setProperty("EXPERIENCE_POSTGRES_USER", dotenv.get("EXPERIENCE_POSTGRES_USER"));
-		System.setProperty("EXPERIENCE_POSTGRES_PASSWORD", dotenv.get("EXPERIENCE_POSTGRES_PASSWORD"));
-		System.setProperty("EXPERIENCE_POSTGRES_DB", dotenv.get("EXPERIENCE_POSTGRES_DB"));
 
+		// Set environment variables as system properties
+		System.setProperty("BUCKETLIST_POSTGRES_USER", dotenv.get("BUCKETLIST_POSTGRES_USER"));
+		System.setProperty("BUCKETLIST_POSTGRES_PASSWORD", dotenv.get("BUCKETLIST_POSTGRES_PASSWORD"));
+		System.setProperty("BUCKETLIST_POSTGRES_DB", dotenv.get("BUCKETLIST_POSTGRES_DB"));
 
+		// Run the Spring Boot application
 		SpringApplication.run(BucketlistServiceApplication.class, args);
 	}
-
 }
