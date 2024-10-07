@@ -6,20 +6,20 @@ public class ExperienceDTO {
     private Long categoryId;
     private String imgAddress;
     private String description;
-    private Long addedBy;
-    private Long lastModifiedBy;
+    private Long createdById;
+    private Long lastModifiedById;
 
     public ExperienceDTO() {
     }
 
-    public ExperienceDTO(Long experienceId, String experienceName, Long categoryId, String imgAddress, String description, Long addedBy, Long lastModifiedBy) {
+    public ExperienceDTO(Long experienceId, String experienceName, Long categoryId, String imgAddress, String description, Long createdById, Long lastModifiedById) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.categoryId = categoryId;
         this.imgAddress = imgAddress;
         this.description = description;
-        this.addedBy = addedBy;
-        this.lastModifiedBy = lastModifiedBy;
+        this.createdById = createdById;
+        this.lastModifiedById = lastModifiedById;
     }
 
     public Long getExperienceId() {
@@ -62,19 +62,19 @@ public class ExperienceDTO {
         this.description = description;
     }
 
-    public Long getAddedBy() {
-        return addedBy;
+    public Long getCreatedById() {
+        return createdById;
     }
 
-    public void setAddedBy(Long addedBy) {
-        this.addedBy = addedBy;
+    public void setCreatedById(Long createdById) {
+        this.createdById = createdById;
     }
 
-    public Long getLastModifiedBy() {
-        return lastModifiedBy;
+    public Long getLastModifiedById() {
+        return lastModifiedById;
     }
 
-    public void setLastModifiedBy(Long lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
+    public void setLastModifiedById(Long lastModifiedById) {
+        this.lastModifiedById = lastModifiedById;
     }
 }

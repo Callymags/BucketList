@@ -19,5 +19,5 @@ public interface ExperienceService {
 
     ExperienceDTO deleteExperience(Long experienceId, Long userId);
 
-    ExperienceDTO updateExperienceImage(Long experienceId, MultipartFile image) throws IOException;
+    ExperienceDTO updateExperienceImage(Long experienceId, Long userId, MultipartFile image) throws IOException;
 }

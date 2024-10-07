@@ -3,12 +3,15 @@ package com.bucketlist.project.service;
 import com.bucketlist.project.exceptions.APIException;
 import com.bucketlist.project.exceptions.PermissionDeniedException;
 import com.bucketlist.project.exceptions.ResourceNotFoundException;
+import com.bucketlist.project.model.AppRole;
 import com.bucketlist.project.model.Category;
 import com.bucketlist.project.model.Experience;
+import com.bucketlist.project.model.User;
 import com.bucketlist.project.payload.ExperienceDTO;
 import com.bucketlist.project.payload.ExperienceResponse;
 import com.bucketlist.project.repositories.CategoryRepository;
 import com.bucketlist.project.repositories.ExperienceRepository;
+import com.bucketlist.project.repositories.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +36,9 @@ public class ExperienceServiceImpl implements ExperienceService {
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -45,6 +51,10 @@ public class ExperienceServiceImpl implements ExperienceService {
     public ExperienceDTO addExperience(Long categoryId, ExperienceDTO experienceDTO, Long userId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
+
+        // Find the user who is adding the experience
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
 
         boolean isExpNotPresent = true;
 
@@ -61,8 +71,8 @@ public class ExperienceServiceImpl implements ExperienceService {
             Experience experience = modelMapper.map(experienceDTO, Experience.class);
             experience.setImgAddress("default.jpg");
             experience.setCategory(category);
-            experience.setAddedBy(userId);
-            experience.setLastModifiedBy(userId);
+            experience.setCreatedBy(user);
+            experience.setLastModifiedBy(user);
 
             Experience savedExperience = experienceRepository.save(experience);
             return modelMapper.map(savedExperience, ExperienceDTO.class);
@@ -163,14 +173,17 @@ public class ExperienceServiceImpl implements ExperienceService {
         Experience experienceFromDB = experienceRepository.findById(experienceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Experience", "experienceId", experienceId));
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
+
         Experience experience = modelMapper.map(experienceDTO, Experience.class);
 
         // If admin or user that added experience
-        if (userId.equals(1001L) || experienceFromDB.getAddedBy().equals(userId)) {
+        if (user.getRole().getRoleName() == AppRole.ROLE_ADMIN || experienceFromDB.getCreatedBy().getUserId().equals(userId)) {
         experienceFromDB.setExperienceName(experience.getExperienceName());
         experienceFromDB.setDescription(experience.getDescription());
         experienceFromDB.setImgAddress(experience.getImgAddress());
-        experienceFromDB.setLastModifiedBy(userId);
+        experienceFromDB.setLastModifiedBy(user);
 
         Experience savedExperience = experienceRepository.save(experienceFromDB);
 
@@ -186,22 +199,35 @@ public class ExperienceServiceImpl implements ExperienceService {
         Experience experienceFromDB = experienceRepository.findById(experienceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Experience", "experienceId", experienceId));
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
+
         // If admin or user that added experience
-        if (userId.equals(1001L) || experienceFromDB.getAddedBy().equals(userId)) {
-        experienceRepository.delete(experienceFromDB);
-        return modelMapper.map(experienceFromDB, ExperienceDTO.class);
+        if (user.getRole().getRoleName() == AppRole.ROLE_ADMIN || experienceFromDB.getCreatedBy().getUserId().equals(userId)) {
+            experienceRepository.delete(experienceFromDB);
+            return modelMapper.map(experienceFromDB, ExperienceDTO.class);
         } else {
             throw new PermissionDeniedException("UserId", userId, "experience", "delete");
         }
     }
 
     @Override
-    public ExperienceDTO updateExperienceImage(Long experienceId, MultipartFile image) throws IOException {
+    public ExperienceDTO updateExperienceImage(Long experienceId, Long userId, MultipartFile image ) throws IOException {
         Experience experienceFromDB = experienceRepository.findById(experienceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Experience", "experienceId", experienceId));
-        String fileName = fileService.uploadImage(uploadDir, image);
-        experienceFromDB.setImgAddress(fileName);
-        Experience updatedExperience = experienceRepository.save(experienceFromDB);
-        return modelMapper.map(updatedExperience, ExperienceDTO.class);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "userId", userId));
+
+        if (user.getRole().getRoleName() == AppRole.ROLE_ADMIN || experienceFromDB.getCreatedBy().getUserId().equals(userId)) {
+            String fileName = fileService.uploadImage(uploadDir, image);
+            experienceFromDB.setImgAddress(fileName);
+            experienceFromDB.setLastModifiedBy(user);
+
+            Experience updatedExperience = experienceRepository.save(experienceFromDB);
+            return modelMapper.map(updatedExperience, ExperienceDTO.class);
+        } else {
+            throw new PermissionDeniedException("UserId", userId, "experience", "update image");
+        }
     }
 }

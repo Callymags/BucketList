@@ -74,10 +74,11 @@ public class ExperienceController {
         return new ResponseEntity<>(deletedExperience, HttpStatus.OK);
     }
 
-    @PutMapping("/experience/{experienceId}/image")
+    @PutMapping("/experience/{experienceId}/user/{userId}/image")
     public ResponseEntity<ExperienceDTO> updateExperienceImage(@PathVariable Long experienceId,
+                                                               @PathVariable Long userId,
                                                                @RequestParam("image") MultipartFile image) throws IOException {
-        ExperienceDTO updatedExperience = experienceService.updateExperienceImage(experienceId, image);
+        ExperienceDTO updatedExperience = experienceService.updateExperienceImage(experienceId, userId, image);
         return new ResponseEntity<>(updatedExperience, HttpStatus.OK);
     }
 }

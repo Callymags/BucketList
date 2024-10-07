@@ -20,29 +20,33 @@ public class Experience {
     @JoinColumn(name = "category_id", referencedColumnName = "categoryId")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "created_by", referencedColumnName = "userId")
+    private User createdBy;
+
     private String imgAddress;
 
     @NotBlank
     @Size(min = 3, message = "Experience description must contain at least three characters")
     private String description;
 
-    @NotNull
-    private Long addedBy;
-    @NotNull
-    private Long lastModifiedBy;
+    @ManyToOne
+    @JoinColumn(name = "last_modified_by", referencedColumnName = "userId")
+    private User lastModifiedBy;
 
     public Experience() {
     }
 
-    public Experience(Long experienceId, String experienceName, Category category, String imgAddress, String description, Long addedBy, Long lastModifiedBy) {
+    public Experience(Long experienceId, String experienceName, Category category, String imgAddress, String description, User createdBy, User lastModifiedBy) {
         this.experienceId = experienceId;
         this.experienceName = experienceName;
         this.category = category;
         this.imgAddress = imgAddress;
         this.description = description;
-        this.addedBy = addedBy;
+        this.createdBy = createdBy;
         this.lastModifiedBy = lastModifiedBy;
     }
+
 
     public Long getExperienceIdId() {
         return experienceId;
@@ -84,19 +88,19 @@ public class Experience {
         this.description = description;
     }
 
-    public Long getAddedBy() {
-        return addedBy;
+    public User getCreatedBy() {
+        return createdBy;
     }
 
-    public void setAddedBy(Long addedBy) {
-        this.addedBy = addedBy;
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Long getLastModifiedBy() {
+    public User getLastModifiedBy() {
         return lastModifiedBy;
     }
 
-    public void setLastModifiedBy(Long lastModifiedBy) {
+    public void setLastModifiedBy(User lastModifiedBy) {
         this.lastModifiedBy = lastModifiedBy;
     }
 }
