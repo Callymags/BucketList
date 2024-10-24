@@ -2,8 +2,15 @@ package com.bucketlist.project.repositories;
 
 import com.bucketlist.project.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    // Optionally, you can add custom query methods, like finding by username or email
-    User findByUserName(String userName);
+    Optional<User> findByUserName(String userName);
+
+    Boolean existsByUserName(String username);
+
+    Boolean existsByEmail(String email);
 }

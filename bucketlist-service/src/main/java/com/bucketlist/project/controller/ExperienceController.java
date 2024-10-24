@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
+@RequestMapping("/api")
 public class ExperienceController {
 
     @Autowired
